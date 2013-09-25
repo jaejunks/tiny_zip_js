@@ -57,7 +57,7 @@ function tiny_zip()
 		else
 		{
 			var output = new Uint8Array(local_offset + central_offset + 22);
-			for (var i = 0, k = 0; i < output.length; i++)
+			for (var i = 0, k = 0; i < outQueue.length; i++)
 			{
 				output.set(outQueue[i], k);
 				k += outQueue[i].length;
