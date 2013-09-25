@@ -73,8 +73,7 @@ function tiny_zip()
 		{
 			var code = string.charCodeAt(i);
 			result.push(code & 0xFF);
-			code >>> 8;
-			for (; code > 0; code >>> 8)
+			for (code = code >>> 8; code > 0; code = code >>> 8)
 				result.push(code & 0xFF);
 		}
 		return result;
