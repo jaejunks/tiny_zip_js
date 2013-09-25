@@ -32,7 +32,7 @@ function tiny_zip()
 		centralHs.push(centralH);
 	};
 	
-	this.generate = function()
+	this.generate = function(type)
 	{
 		var n = localHs.length;
 		//
@@ -42,6 +42,28 @@ function tiny_zip()
 		endof.set([0x50, 0x4b, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00, n, n >> 8, n, n >> 8,
 		coff, coff >> 8, coff >> 16, coff >> 24, loff, loff >> 8, loff >> 16, loff >> 24, 0x00, 0x00]);	
 		//
+		var outQueue = [];
+		for (var i = 0; i < n; ++i)
+		{
+			outQueue.push(localHs[i]);
+			outQueue.push(contents[i]);
+		}
+		for (var i = 0; i < n; ++i)
+			outQueue.push(centralHs[i]);
+		if (type == "blob")
+			return new Blob(outQueue, {type: "data:application/zip"}));
+		else
+		{
+			var output = new Uint8Array(local_offset + central_offset + 22);
+			output.set(outQueue);
+			return output;
+		}
+		/*
+		for (var i = 0; i < n; ++i)
+		{
+			output.set(centralHs[i], k);
+			k += centralHs[i].length;
+		}
 		var output = new Uint8Array(local_offset + central_offset + 22);
 		var k = 0;
 		for (var i = 0; i < n; ++i)
@@ -55,7 +77,7 @@ function tiny_zip()
 			k += centralHs[i].length;
 		}
 		output.set(endof, k);
-		return output;
+		return output; */
 	};
 	
 	var array_from_str = function(string)
