@@ -73,8 +73,8 @@ function tiny_zip()
 		{
 			var code = string.charCodeAt(i);
 			result.push(code & 0xFF);
-			code >> 8;
-			for (; code > 0; code >> 8)
+			code >>> 8;
+			for (; code > 0; code >>> 8)
 				result.push(code & 0xFF);
 		}
 		return result;
@@ -84,12 +84,12 @@ function tiny_zip()
 	{
 		var Table = [];
 		for (var i = 0; i < 256; ++i)
-        {
-            var crc = i;
-            for (var j = 0; j < 8; ++j)
-                crc = (crc & 1) ? (0xEDB88320 ^ (crc >>> 1)) : (crc >>> 1);
-            Table[i] = crc;
-        }
+		{
+			var crc = i;
+			for (var j = 0; j < 8; ++j)
+				crc = -(crc & 1) & 0xEDB88320 ^ (crc >>> 1) ;
+			Table[i] = crc;
+        	}
 		return Table;
 	} ();
 	var crc32 = function(data)
