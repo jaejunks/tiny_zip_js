@@ -1,13 +1,13 @@
 function tiny_zip()
 {
-    var localHs = [];
-    var contents = [];
-    var local_offset = 0;
-    var centralHs = [];
-    var central_offset = 0;
-	this.add = function(name, content)
+	var localHs = [];
+	var contents = [];
+	var local_offset = 0;
+	var centralHs = [];
+	var central_offset = 0;
+	this.add = function(nameStr, content)
 	{
-		name = array_from_str(name);
+		var name = array_from_str(nameStr);
 		var nlen = name.length;
 		var clen = content.length;
 		var crc = crc32(content);
