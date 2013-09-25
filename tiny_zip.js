@@ -84,5 +84,6 @@ function binary_from_string(string)
 {
 	var binary = new Uint8Array(string.length);
 	for (var i = 0; i < string.length; ++i)
-			centralH.set([string.charCodeAt(i)], i);
+		binary.set([string.charCodeAt(i)], i);
+	return binary;
 }
