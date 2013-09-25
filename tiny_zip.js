@@ -50,34 +50,20 @@ function tiny_zip()
 		}
 		for (var i = 0; i < n; ++i)
 			outQueue.push(centralHs[i]);
+		outQueue.push(endof);
+		//
 		if (type == "blob")
 			return new Blob(outQueue, {type: "data:application/zip"});
 		else
 		{
 			var output = new Uint8Array(local_offset + central_offset + 22);
-			output.set(outQueue);
+			for (var i = 0, k = 0; i < output.length; i++)
+			{
+				output.set(outQueue[i], k);
+				k += outQueue[i].length;
+			}
 			return output;
 		}
-		/*
-		for (var i = 0; i < n; ++i)
-		{
-			output.set(centralHs[i], k);
-			k += centralHs[i].length;
-		}
-		var output = new Uint8Array(local_offset + central_offset + 22);
-		var k = 0;
-		for (var i = 0; i < n; ++i)
-		{
-			output.set(localHs[i], k); k += localHs[i].length;
-			output.set(contents[i], k); k += contents[i].length;
-		}
-		for (var i = 0; i < n; ++i)
-		{
-			output.set(centralHs[i], k);
-			k += centralHs[i].length;
-		}
-		output.set(endof, k);
-		return output; */
 	};
 	
 	var array_from_str = function(string)
