@@ -76,7 +76,7 @@ function tiny_zip()
 	
 	var array_from_str = function(string)
 	{
-		string = string.replace(/[\/\:*?"<>\\|]/), "").slice(0, 255);
+		string = string.replace(/[\/\:*?"<>\\|]/, "").slice(0, 255);
 		var output = new Uint8Array(string.length * 2);
 		for (var i = 0; i < string.length; ++i)
 		{
