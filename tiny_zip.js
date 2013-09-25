@@ -51,7 +51,7 @@ function tiny_zip()
 		for (var i = 0; i < n; ++i)
 			outQueue.push(centralHs[i]);
 		if (type == "blob")
-			return new Blob(outQueue, {type: "data:application/zip"}));
+			return new Blob(outQueue, {type: "data:application/zip"});
 		else
 		{
 			var output = new Uint8Array(local_offset + central_offset + 22);
