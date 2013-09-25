@@ -76,7 +76,14 @@ function tiny_zip()
 	
 	var array_from_str = function(string)
 	{
-		return uint8array_from_binstr(unescape(encodeURIComponent(string.replace(/[\/\:*?"<>\\|]/),"").slice(0,255)));
+		string = string.replace(/[\/\:*?"<>\\|]/), "").slice(0, 255);
+		var output = new Uint8Array(string.length * 2);
+		for (var i = 0; i < string.length; ++i)
+		{
+			output[2*i] = string.charCodeAt(i);
+			output[2*i+1] = string.charCodeAt(i) >> 8;
+		}
+		return output;
 	};
 	
 	var crcTable = function()
