@@ -1,3 +1,11 @@
+function uint8array_from_binstr(string)
+{
+	var binary = new Uint8Array(string.length);
+	for (var i = 0; i < string.length; ++i)
+		binary.set([string.charCodeAt(i)], i);
+	return binary;
+}
+
 function tiny_zip()
 {
 	var localHs = [];
@@ -68,15 +76,7 @@ function tiny_zip()
 	
 	var array_from_str = function(string)
 	{
-		var result = [];
-		for (var i = 0; i < string.length; ++i)
-		{
-			var code = string.charCodeAt(i);
-			result.push(code & 0xFF);
-			for (code = code >>> 8; code > 0; code = code >>> 8)
-				result.push(code & 0xFF);
-		}
-		return result;
+		return uint8array_from_binstr(encodeURIComponent(string.replace(/[\/\:*?"<>\\|]/),"").slice(0,255));
 	};
 	
 	var crcTable = function()
@@ -98,12 +98,4 @@ function tiny_zip()
 			crc = (crc >>> 8) ^ crcTable[(crc ^ data[i]) & 0xFF];
 		return ~crc;
 	};
-}
-
-function uint8array_from_binstr(string)
-{
-	var binary = new Uint8Array(string.length);
-	for (var i = 0; i < string.length; ++i)
-		binary.set([string.charCodeAt(i)], i);
-	return binary;
 }
