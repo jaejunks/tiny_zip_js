@@ -7,6 +7,7 @@ function tiny_zip()
     var central_offset = 0;
 	this.add = function(name, content)
 	{
+		name = array_from_str(name);
 		var nlen = name.length;
 		var clen = content.length;
 		var crc = crc32(content);
@@ -14,8 +15,7 @@ function tiny_zip()
 		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
 		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8, 0x00, 0x00]);
-		for (var i = 0; i < nlen; ++i)
-			localH.set([name.charCodeAt(i)], 30 + i);
+		localH.set(name, 30);
 		//...content...
 		var centralH = new Uint8Array(46 + nlen);
 		var loff = local_offset;
@@ -23,8 +23,7 @@ function tiny_zip()
 		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
 		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff, loff >> 8, loff >> 16, loff >> 24]);
-		for (var i = 0; i < nlen; ++i)
-			centralH.set([name.charCodeAt(i)], 46 + i);
+		centralH.set(name, 46);
 		central_offset += centralH.length;
 		//
 		local_offset += localH.length + content.length;
@@ -59,6 +58,20 @@ function tiny_zip()
 		return output;
 	};
 	
+	var array_from_str = function(string)
+	{
+		var result = [];
+		for (var i = 0; i < string.length; ++i)
+		{
+			var code = string.charCodeAt(i);
+			result.push(code & 0xFF);
+			code >> 8;
+			for (; code > 0; code >> 8)
+				result.push(code & 0xFF);
+		}
+		return result;
+	};
+	
 	var crcTable = function()
 	{
 		var Table = [];
@@ -80,7 +93,7 @@ function tiny_zip()
 	};
 }
 
-function binary_from_string(string)
+function uint8array_from_binstr(string)
 {
 	var binary = new Uint8Array(string.length);
 	for (var i = 0; i < string.length; ++i)
