@@ -20,14 +20,14 @@ function tiny_zip()
 		var clen = content.length;
 		var crc = crc32(content);
 		var localH = new Uint8Array(30 + nlen);
-		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
 		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8, 0x00, 0x00]);
 		localH.set(name, 30);
 		//...content...
 		var centralH = new Uint8Array(46 + nlen);
 		var loff = local_offset;
-		centralH.set([0x50, 0x4b, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		centralH.set([0x50, 0x4b, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
 		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff, loff >> 8, loff >> 16, loff >> 24]);
@@ -76,14 +76,7 @@ function tiny_zip()
 	
 	var array_from_str = function(string)
 	{
-		string = string.replace(/[\/\:*?"<>\\|]/, "").slice(0, 255);
-		var output = new Uint8Array(string.length * 2);
-		for (var i = 0; i < string.length; ++i)
-		{
-			output[2*i] = string.charCodeAt(i);
-			output[2*i+1] = string.charCodeAt(i) >> 8;
-		}
-		return output;
+		return uint8array_from_binstr(unescape(encodeURIComponent(string.replace(/[\/\:*?"<>\\|]/), "").slice(0, 255)));
 	};
 	
 	var crcTable = function()
