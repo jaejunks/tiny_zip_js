@@ -72,7 +72,7 @@ function tiny_zip()
 			for (var i = 0, k = 0; i < outQueue.length; k += outQueue[i].length, ++i)
 				output.set(outQueue[i], k);
 			return output;
-		}
+		}/*
 		else // type == "base64"
 		{//disfunctional
 			function out_it()
@@ -134,7 +134,7 @@ function tiny_zip()
 			case 2:
 				output = output.slice(0, -1);
 			}
-			return output;
+			return output;*/
 	};
 	
 	var crcTable = function()
