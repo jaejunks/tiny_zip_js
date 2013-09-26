@@ -99,8 +99,10 @@ function tiny_zip()
 			{
 				it = new out_it();
 				this.offset = 2;
+				var prev_byte = 0;
 				this.inc = function()
 				{
+					prev_byte = it.deref();
 					if (this.offset == 6)
 						this.offset = 0;
 					else
@@ -109,10 +111,9 @@ function tiny_zip()
 						this.offset += 2;						
 					}
 				};
-				var prev_byte = 0;
 				this.deref = function()
 				{
-					return prev <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
+					return prev_byte <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
 				};
 			}
 			//
