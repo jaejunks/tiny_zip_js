@@ -112,7 +112,7 @@ function tiny_zip()
 				var prev_byte = 0;
 				this.deref = function()
 				{
-					return (prev <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF);
+					return prev <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
 				};
 			}
 			//
