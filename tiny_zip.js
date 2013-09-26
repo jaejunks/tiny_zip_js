@@ -153,7 +153,7 @@ function tiny_zip()
 	{
 		var crc = -1;
 		for (var i = 0; i < data.length; ++i)
-			crc = (crc >>> 8) ^ crcTable[crc ^ data[i] & 0xFF];
+			crc = (crc >>> 8) ^ crcTable[(crc ^ data[i]) & 0xFF];
 		return ~crc;
 	};
 }
