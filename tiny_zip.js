@@ -113,7 +113,7 @@ function tiny_zip()
 				};
 				this.deref = function()
 				{
-					return prev_byte <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
+					//return prev_byte <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
 				};
 			}
 			//
