@@ -19,7 +19,7 @@ function tiny_zip()
 		{
 			return uint8array_from_binstr(unescape(encodeURIComponent(string)));
 		};
-		var name = utf8array_from_str(nameStr.replace(/[\/\:*?"<>\\|]/, "").slice(0, 255));
+		var name = utf8array_from_str(nameStr.replace(/[\/\:*?"<>\\|]/g, "_").slice(0, 255));
 		var nlen = name.length;
 		var clen = content.length;
 		var crc = crc32(content);
