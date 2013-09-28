@@ -44,7 +44,7 @@ function tiny_zip()
 		centralHs.push(centralH);
 	};
 	
-	this.generate = function(type)
+	this.generate = function()
 	{
 		var n = localHs.length;
 		//
@@ -64,77 +64,14 @@ function tiny_zip()
 			outQueue.push(centralHs[i]);
 		outQueue.push(endof);
 		//
-		if (type == "blob")
-			return new Blob(outQueue, {type: "data:application/zip"});
+		return new Blob(outQueue, {type: "data:application/zip"});
 		else if (type == "array")
 		{
 			var output = new Uint8Array(local_offset + central_offset + 22);
 			for (var i = 0, k = 0; i < outQueue.length; k += outQueue[i].length, ++i)
 				output.set(outQueue[i], k);
 			return output;
-		}/*
-		else // type == "base64"
-		{//disfunctional
-			function out_it()
-			{
-				this.arr_i = 0;
-				this.offset = 0;
-				this.inc = function()
-				{
-					if (this.offset < outQueue[this.arr_i].length)
-						++this.offset;
-					else
-					{
-						++this.arr_i;
-						this.offset = 0;
-					}
-				};
-				this.deref = function()
-				{
-					return outQueue[this.arr_i][this.offset];
-				};
-			}
-			//
-			function sixbit_out_it()
-			{
-				it = new out_it();
-				this.offset = 2;
-				var prev_byte = 0;
-				this.inc = function()
-				{
-					prev_byte = it.deref();
-					if (this.offset == 6)
-						this.offset = 0;
-					else
-					{
-						it.inc();
-						this.offset += 2;						
-					}
-				};
-				this.deref = function()
-				{
-					//return prev_byte <<< (8 - this.offset) | it.deref() >>> this.offset & 0xFFFFFF;
-				};
-			}
-			//
-			outQueue.push([0]);
-			var output = [];
-			var b64Table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+\\";
-			it = new sixbit_out_it();
-			for (it.it.arr_i < outQueue.length; it.inc())
-				output += b64Table.charAt(it.deref);
-			switch(it.offset)
-			{
-			case 2:
-				output += "==";
-				break;
-			case 4:
-				output += "=";
-				break;
-			case 2:
-				output = output.slice(0, -1);
-			}
-			return output;*/
+		}
 	};
 	
 	var crcTable = function()
