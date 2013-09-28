@@ -24,17 +24,17 @@ function tiny_zip()
 		var clen = content.length;
 		var crc = crc32(content);
 		var localH = new Uint8Array(30 + nlen);
-		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
-		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8, 0x00, 0x00]);
+		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	crc, crc >> 8,
+			crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
+			nlen, nlen >> 8, 0x00, 0x00]);
 		localH.set(name, 30);
 		//
 		var centralH = new Uint8Array(46 + nlen);
 		var loff = local_offset;
 		centralH.set([0x50, 0x4b, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24,
-		clen, clen >> 8, clen >> 16, clen >> 24, nlen, nlen >> 8,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff, loff >> 8, loff >> 16, loff >> 24]);
+			crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24, clen, clen >> 8, clen >> 16,
+			clen >> 24, nlen, nlen >> 8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff,
+			loff >> 8, loff >> 16, loff >> 24]);
 		centralH.set(name, 46);
 		central_offset += centralH.length;
 		//
@@ -51,8 +51,8 @@ function tiny_zip()
 		var endof = new Uint8Array(22);
 		var loff = local_offset;
 		var coff = central_offset;
-		endof.set([0x50, 0x4b, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00, n, n >> 8, n, n >> 8,
-		coff, coff >> 8, coff >> 16, coff >> 24, loff, loff >> 8, loff >> 16, loff >> 24, 0x00, 0x00]);	
+		endof.set([0x50, 0x4b, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00, n, n >> 8, n, n >> 8, coff, coff >> 8, coff >> 16,
+			coff >> 24, loff, loff >> 8, loff >> 16, loff >> 24, 0x00, 0x00]);	
 		//
 		var outQueue = [];
 		for (var i = 0; i < n; ++i)
