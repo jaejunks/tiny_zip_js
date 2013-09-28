@@ -65,13 +65,6 @@ function tiny_zip()
 		outQueue.push(endof);
 		//
 		return new Blob(outQueue, {type: "data:application/zip"});
-		else if (type == "array")
-		{
-			var output = new Uint8Array(local_offset + central_offset + 22);
-			for (var i = 0, k = 0; i < outQueue.length; k += outQueue[i].length, ++i)
-				output.set(outQueue[i], k);
-			return output;
-		}
 	};
 	
 	var crcTable = function()
