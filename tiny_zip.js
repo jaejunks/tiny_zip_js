@@ -13,8 +13,9 @@ function tiny_zip()
 	var local_offset = 0;
 	var centralHs = [];
 	var central_offset = 0;
-	this.add = function(nameStr, content)
+	this.add = function(nameStr, content, comment)
 	{
+		if (typeof arg == 'undefin
 		var utf8array_from_str = function(string)
 		{
 			return uint8array_from_binstr(unescape(encodeURIComponent(string)));
@@ -22,6 +23,7 @@ function tiny_zip()
 		var name = utf8array_from_str(nameStr.replace(/[\/\:*?"<>\\|]/g, "_").slice(0, 255));
 		var nlen = name.length;
 		var clen = content.length;
+		var comm_len = comment.length;
 		var crc = crc32(content);
 		var localH = new Uint8Array(30 + nlen);
 		localH.set([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	crc, crc >> 8,
@@ -29,13 +31,14 @@ function tiny_zip()
 			nlen, nlen >> 8, 0x00, 0x00]);
 		localH.set(name, 30);
 		//
-		var centralH = new Uint8Array(46 + nlen);
+		var centralH = new Uint8Array(46 + nlen + comm_len);
 		var loff = local_offset;
 		centralH.set([0x50, 0x4b, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			crc, crc >> 8, crc >> 16, crc >> 24, clen, clen >> 8, clen >> 16, clen >> 24, clen, clen >> 8, clen >> 16,
-			clen >> 24, nlen, nlen >> 8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff,
+			clen >> 24, nlen, nlen >> 8, 0x00, 0x00, comm_len, comm_len >> 8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, loff,
 			loff >> 8, loff >> 16, loff >> 24]);
 		centralH.set(name, 46);
+		centralH.set(comment, 46 + nlen);
 		central_offset += centralH.length;
 		//
 		local_offset += localH.length + content.length;
