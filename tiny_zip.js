@@ -15,7 +15,7 @@ function tiny_zip()
 	var central_offset = 0;
 	this.add = function(nameStr, content, commentStr)
 	{
-		if (typeof comment == 'undefined') commentStr = "";
+		if (typeof commentStr == 'undefined') commentStr = "";
 		var utf8array_from_str = function(string)
 		{
 			return uint8array_from_binstr(unescape(encodeURIComponent(string)));
